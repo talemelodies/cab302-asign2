@@ -1,6 +1,7 @@
 package asgn2Pizzas;
 
 import java.time.LocalTime;
+import java.util.ArrayList;
 
 import asgn2Exceptions.PizzaException;
 
@@ -35,7 +36,17 @@ public class MargheritaPizza extends Pizza {
 	 *
 	 */
 	public MargheritaPizza(int quantity, LocalTime orderTime, LocalTime deliveryTime) throws PizzaException {
-		// TO DO
+
+		super(quantity, orderTime, deliveryTime, "Margherita", 8.00);
+		Topping = new ArrayList<PizzaTopping>();
+		Topping.add(PizzaTopping.TOMATO);
+		Topping.add(PizzaTopping.CHEESE);
+		calculateCostPerPizza();
+		
+		if (quantity > 0 && quantity <= 10) {
+		} else {
+			throw new PizzaException("Quantity of the pizza should between 1 and 10");
+		}
 	}
 
 }
