@@ -12,6 +12,11 @@ import asgn2Exceptions.CustomerException;
 */
 public abstract class Customer {
 
+	private String name;
+	private String mobileNumber;
+	private int locationX;
+	private int locationY;
+	private String costumerType;
 
 	/**
 	 *  This class represents a customer of the Pizza Palace restaurant.  A detailed description of the class's fields
@@ -31,7 +36,41 @@ public abstract class Customer {
 	 * 
 	 */
 	public Customer(String name, String mobileNumber, int locationX, int locationY, String type) throws CustomerException{
-		// TO DO
+	
+		if(!(type.equals("Pick Up") || type.equals("Driver Delivery") || type.equals("Drone Delivery"))){
+			throw new CustomerException("Invalid Type of Customer.");
+		}
+		if (name == null) {
+			throw new CustomerException("Customer name should be supplied");
+		}
+		
+		if (name.length() > 20 || name.length() < 1 ){
+			throw new CustomerException("invalid name of customer");
+		}
+		
+		if (mobileNumber.length() != 10 || mobileNumber.charAt(0)!= '0'){
+			throw new CustomerException("invalid mobileNumber");
+		}
+		
+		if ((type == "Driver Delivery" && locationX > 10) || (type == "Driver Delivery" && locationX < -10) || 
+				(type == "Driver Delivery" && locationY > 10) || (type == "Driver Delivery" && locationY < -10)){
+			throw new CustomerException("When the type is a kind of delivery, the absolute value of x coordinate and y coordinate cannot over 10 blocks ");
+		}
+		
+		if ((type == "Pick Up" && locationX != 0)||(type == "Pick up"&& locationY != 0)){
+			throw new CustomerException("When the type is Pick Up, the x location and y location must to be 0");
+		}
+		
+		if ((type == "Drone Delivery" && locationX > 10) || (type == "Drone Delivery" && locationX < -10) || 
+				(type == "Drone Delivery" && locationY > 10) || (type == "Drone Delivery" && locationY < -10)){
+			throw new CustomerException("When the type is a kind of delivery, the absolute value of x coordinate and y coordinate cannot over 10 blocks");
+		}
+		
+		this.name = name;
+		this.mobileNumber = mobileNumber;
+		this.locationX = locationX;
+		this.locationY = locationY;
+		this.costumerType = type;
 	}
 	
 	/**
@@ -39,7 +78,8 @@ public abstract class Customer {
 	 * @return The Customer's name.
 	 */
 	public final String getName(){
-		// TO DO
+		
+		return this.name;
 	}
 	
 	/**
@@ -47,7 +87,8 @@ public abstract class Customer {
 	 * @return The Customer's mobile number.
 	 */
 	public final String getMobileNumber(){
-		// TO DO
+		
+		return this.mobileNumber;
 	}
 
 	/**
@@ -56,7 +97,8 @@ public abstract class Customer {
 	 * @return A human understandable description of the Customer's type.
 	 */
 	public final String getCustomerType(){
-		// TO DO
+		
+		return this.costumerType;
 	}
 	
 	/**
@@ -65,7 +107,8 @@ public abstract class Customer {
 	 * @return The Customer's X location
 	 */
 	public final int getLocationX(){
-		// TO DO
+		
+		return this.locationX;
 	}
 
 	/**
@@ -74,7 +117,8 @@ public abstract class Customer {
 	 * @return The Customer's Y location
 	 */
 	public final int getLocationY(){
-		// TO DO
+		
+		return this.locationY;
 	}
 
 	/**
