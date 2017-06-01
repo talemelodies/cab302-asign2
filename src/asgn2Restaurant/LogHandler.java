@@ -1,12 +1,17 @@
 package asgn2Restaurant;
 
 
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import asgn2Customers.Customer;
+import asgn2Customers.CustomerFactory;
 import asgn2Exceptions.CustomerException;
 import asgn2Exceptions.LogHandlerException;
 import asgn2Exceptions.PizzaException;
 import asgn2Pizzas.Pizza;
+import asgn2Pizzas.PizzaFactory;
 
 /**
  *
@@ -30,7 +35,28 @@ public class LogHandler {
 	 * 
 	 */
 	public static ArrayList<Customer> populateCustomerDataset(String filename) throws CustomerException, LogHandlerException{
-		// TO DO
+	
+		String logFile = ".//logs/" + filename;
+		String line = "";
+		
+		ArrayList<Customer> Customers = new ArrayList<Customer>();
+		
+		try(BufferedReader br = new BufferedReader(new FileReader(filename))) {
+			 
+			while((line = br.readLine()) != null) {	
+				try{
+			    Customers.add(createCustomer(line));
+				} catch (CustomerException | LogHandlerException e) {
+					// handle exception
+					throw e;
+				}
+			}
+			
+			return Customers;
+		} catch (Exception ex) {
+			//Auto-generated catch block
+			throw new LogHandlerException("There is a problem with the log file:" + ex);
+		}
 	}		
 
 	/**
@@ -42,7 +68,28 @@ public class LogHandler {
 	 * 
 	 */
 	public static ArrayList<Pizza> populatePizzaDataset(String filename) throws PizzaException, LogHandlerException{
-		// TO DO
+	
+		String logFile = ".//logs/" + filename;
+		String line = "";
+		
+		ArrayList<Pizza> Pizzas = new ArrayList<Pizza>();
+		
+		try(BufferedReader br = new BufferedReader(new FileReader(filename))) {
+			 
+			while((line = br.readLine()) != null) {	
+				try{
+			    Pizzas.add(createPizza(line));
+				} catch (PizzaException | LogHandlerException e) {
+					// handle exception
+					throw e;
+				}
+			}
+			
+			return Pizzas;
+		} catch (Exception ex) {
+			// Auto-generated catch block
+			throw new LogHandlerException("There is a problem with the log file:" + ex);
+		}
 	}		
 
 	
@@ -55,7 +102,21 @@ public class LogHandler {
 	 * @throws LogHandlerException - If there was a problem parsing the line from the log file.
 	 */
 	public static Customer createCustomer(String line) throws CustomerException, LogHandlerException{
-		// TO DO
+	
+		String[] customerInformation;
+		try {
+			customerInformation = line.split(",");
+		} catch (Exception e) {
+			throw new LogHandlerException("There was a problem parsing the line from the log file:" + e);
+			// handle exception
+		}
+		try {
+			return CustomerFactory.getCustomer(customerInformation[4], customerInformation[2], customerInformation[3], Integer.parseInt(customerInformation[5]), Integer.parseInt(customerInformation[6]));
+		} catch (CustomerException e) {
+			throw e;
+			// handle exception
+		}
+		
 	}
 	
 	/**
@@ -67,7 +128,32 @@ public class LogHandler {
 	 * @throws LogHandlerException - If there was a problem parsing the line from the log file.
 	 */
 	public static Pizza createPizza(String line) throws PizzaException, LogHandlerException{
-		// TO DO		
+				
+		LocalTime orderTime, deliveryTime;
+		int numberOfPizzas;
+		String[] pizzaInformation;
+		String code;
+		
+		try {
+			pizzaInformation = line.split(",");
+		} catch (Exception e) {
+			throw new LogHandlerException("There was a problem parsing the line from the log file:" + e);
+			// handle exception
+		}
+		
+		//Input value into variables
+		orderTime = LocalTime.parse(pizzaInformation[0]);
+		deliveryTime = LocalTime.parse(pizzaInformation[1]);
+		numberOfPizzas = Integer.parseInt(pizzaInformation[8]);
+		code = pizzaInformation[7];
+		
+
+		try {
+			return PizzaFactory.getPizza(code, numberOfPizzas, orderTime, deliveryTime);
+		} catch (PizzaException e) {
+			// handle exception
+			throw e;
+		}
 	}
 
 }
